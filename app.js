@@ -6,11 +6,24 @@ var exphbs = require('express-handlebars');
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/rotten-potatoes', { useMongoClient: true });
+
+// MODELS
+const Review = mongoose.model('Review', {
+    title: String
+  });
 
 // INDEX
 app.get('/', (req, res) => {
-    res.render('reviews-index', { reviews: reviews });
-  })
+  Review.find()
+    .then(reviews => {
+      res.render('reviews-index', { reviews: reviews });
+    })
+    .catch(err => {
+      console.log(err);
+    })
+})
 
 app.listen(3000, () => {
   console.log('App listening on port 3000!')
