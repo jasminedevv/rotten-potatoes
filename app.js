@@ -1,50 +1,45 @@
 const express = require('express')
 const app = express()
+const bodyParser = require('body-parser');
 
-var exphbs = require('express-handlebars');
+const exphbs = require('express-handlebars');
 
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // MONGOOSE STUFF
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
-  // we're connected!
-  console.log("\ndatabase connected\n")
-});
+// Copied this from Raymond's project
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/rotten-potatoes', {useNewUrlParser: true})
+.then(() => {
+    console.log("Connected to DB");
+})
+.catch( err => {
+    throw err;
+})
 
 //Define a schema
-var Schema = mongoose.Schema;
-
-var reviewSchema = new Schema({
-    title: String
+const Review = mongoose.model('Review', {
+  title: String,
+  description: String,
+  movieTitle: String
 });
 
-var Review = mongoose.model('Review', reviewSchema );
-
-var dummy = new Review({title: "dummy review"})
-
-dummy.save(function (err, dummy){
-  if (err) return console.error(err);
-  console.log(dummy)
-})
-
 // INDEX
+
 app.get('/', (req, res) => {
-  console.log("request at /")
   Review.find()
-    .then(reviews => {
-      res.render('reviews-index', { reviews: reviews });
-    })
-    .catch(err => {
-      console.log(err);
-      console.log("I ran")
-    })
-})
+      .then(reviews => {
+          res.render('reviews-index', {reviews: reviews})
+      })
+      .catch(err => {
+          console.log(err)
+      })
+  //res.render('home', {msg: 'Hello World!'});
+});
 
 app.get('/add-dummy-review', (req, res) => {
   console.log("request at /add-dummy-review")
@@ -52,24 +47,21 @@ app.get('/add-dummy-review', (req, res) => {
 });
 
 app.listen(3000, () => {
-  console.log('App listening on port 3000!')
-  var dummy = new Review({title: "dummy review"})
-  console.log(dummy);
-  dummy.save(function (err, dummy){
-    console.log("and this far");
-    if (err) return console.error(err);
-    console.log(dummy)
-  })
-  console.log("made it this far")
+  console.log('App listening on port 3000!');
 })
 
-// OUR MOCK ARRAY OF PROJECTS
-// let reviews = [
-//     { title: "Great Review" },
-//     { title: "Next Review" }
-//   ]
+//add
+app.get('/reviews/new', (req, res) => {
+  res.render('reviews-new', {});
+})
 
-  // app.get('/reviews', (req, res) => {
-    
-  //   res.render('reviews-index', { reviews: reviews });
-  // })
+app.post('/reviews', (req, res) => {
+  Review.create(req.body)
+      .then((review) => {
+          //console.log(review);
+          res.redirect(`/reviews/${review._id}`);
+      })
+      .catch((err) => {
+          console.log(err.message)
+  })
+});
