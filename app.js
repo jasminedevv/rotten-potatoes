@@ -15,7 +15,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // MONGOOSE STUFF
 const mongoose = require('mongoose');
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/rotten-potatoes');
+// Copied this from Raymond's project
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/rotten-potatoes-jh', {useNewUrlParser: true})
+.then(() => {
+    console.log("Connected to DB");
+})
+.catch( err => {
+    throw err;
+})
 
 //Define a schema
 const Review = mongoose.model('Review', {
