@@ -18,7 +18,7 @@ const mongoose = require('mongoose');
 // Copied this from Raymond's project
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/rotten-potatoes-jasmine-h', {useNewUrlParser: true})
 .then(() => {
-    console.log("Connected to DB");
+    console.log("Database connection success!");
 })
 .catch( err => {
     throw err;
