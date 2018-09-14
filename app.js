@@ -1,11 +1,8 @@
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser');
-const methodOverride = require('method-override')
 
 const exphbs = require('express-handlebars');
-
-app.use(methodOverride('_method'))
 
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
@@ -56,33 +53,6 @@ app.listen(3000, () => {
 //add
 app.get('/reviews/new', (req, res) => {
   res.render('reviews-new', {});
-})
-
-// EDIT
-app.get('/reviews/:id/edit', function (req, res) {
-  Review.findById(req.params.id, function(err, review) {
-    res.render('reviews-edit', {review: review});
-  })
-})
-
-// SHOW
-app.get('/reviews/:id', (req, res) => {
-  Review.findById(req.params.id).then((review) => {
-    res.render('reviews-show', { review: review })
-  }).catch((err) => {
-    console.log(err.message);
-  })
-})
-
-// UPDATE
-app.put('/reviews/:id', (req, res) => {
-  Review.findByIdAndUpdate(req.params.id, req.body)
-    .then(review => {
-      res.redirect(`/reviews/${review._id}`)
-    })
-    .catch(err => {
-      console.log(err.message)
-    })
 })
 
 app.post('/reviews', (req, res) => {
