@@ -3,12 +3,11 @@ const app = express()
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override')
 const reviews = require("./controllers/reviews");
+const Review = require('./models/review');
 
 const exphbs = require('express-handlebars');
 
 app.use(methodOverride('_method'))
-
-reviews(app)
 
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
@@ -27,7 +26,10 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/rotten-potatoes
     throw err;
 })
 
-// home route
+// REVIEWS ROUTE
+reviews(app)
+
+// HOME ROUTE
 app.get('/', (req, res) => {
   Review.find()
       .then(reviews => {

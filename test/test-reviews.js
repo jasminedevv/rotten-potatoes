@@ -1,6 +1,6 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const server = require('../server');
+const server = require('../app');
 const should = chai.should();
 const Review = require('../models/review');
 
@@ -17,7 +17,7 @@ describe('Reviews', ()  => {
   // make taco name for the test
   it('should index ALL reviews on / GET', (done) => {
     // use chai-http to make a request to your server
-    chai.request(app)
+    chai.request(server)
         // send a GET request to root route
         .get('/')
         // wait for response
