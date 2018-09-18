@@ -49,10 +49,6 @@ app.get('/add-dummy-review', (req, res) => {
   res.send("hello")
 });
 
-app.listen(3000, () => {
-  console.log('App listening on port 3000!');
-})
-
 //add
 app.get('/reviews/new', (req, res) => {
   res.render('reviews-new', {});
@@ -104,4 +100,8 @@ app.post('/reviews', (req, res) => {
       .catch((err) => {
           console.log(err.message)
   })
+});
+
+app.listen(process.env.PORT || 3000, function(){
+  console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
 });
