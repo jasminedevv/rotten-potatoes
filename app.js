@@ -3,7 +3,9 @@ const app = express()
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override')
 const reviews = require("./controllers/reviews");
+const comments = require("./controllers/comments");
 const Review = require('./models/review');
+const Comment = require('./models/comment');
 
 const exphbs = require('express-handlebars');
 
@@ -28,6 +30,7 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/rotten-potatoes
 
 // REVIEWS ROUTE
 reviews(app)
+comments(app)
 
 // HOME ROUTE
 app.get('/', (req, res) => {
@@ -43,5 +46,7 @@ app.get('/', (req, res) => {
 app.listen(process.env.PORT || 3000, function(){
   console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
 });
+
+app.use(express.static('public'))
 
 module.exports = app;

@@ -1,6 +1,6 @@
 const Review = require('../models/review');
 
-module.exports = function(app) {
+module.exports = (app) => {
 
   // ADD
   app.get('/reviews/new', (req, res) => {
