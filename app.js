@@ -40,6 +40,7 @@ app.get('/', (req, res) => {
       })
       .catch(err => {
           console.log(err);
+          res.send("this app is broken :( <br><br><a href=\"https://www.youtube.com/watch?v=yD2FSwTy2lw\">no one\'s around to help</a>");
       });
 });
 
