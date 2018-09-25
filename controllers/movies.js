@@ -6,12 +6,13 @@ module.exports = (app) => {
 
     app.get('movies/:id', (req, res) => {
         console.log("made it this far. Now attempting to get movie detail from moviedb...");
-        moviedb.movieInfo({ id: req.params.id }).then(
+        movieId = req.params.id;
+        moviedb.movieInfo({ id: movieId }).then(
             response => {
                 res.render('movies-detail', { movies: response.result});
             }).catch(console.error)
     });
-    
+
     app.get('/', (req, res) => {
         console.log("Now attempting to contact movieDB...");
         moviedb.miscNowPlayingMovies().then(response => {

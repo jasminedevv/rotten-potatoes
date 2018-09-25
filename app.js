@@ -7,6 +7,7 @@ const comments = require("./controllers/comments");
 const movies = require("./controllers/movies");
 const Review = require('./models/review');
 const Comment = require('./models/comment');
+const passport = require('passport'), google = require('passport-google-oauth').Strategy;
 
 const exphbs = require('express-handlebars');
 
@@ -33,6 +34,14 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/rotten-potatoes
 reviews(app)
 comments(app)
 movies(app)
+
+app.post('/login',
+  passport.authenticate('google'),
+  function(req, res) {
+    // If this function gets called, authentication was successful.
+    // `req.user` contains the authenticated user.
+    res.redirect('/users/' + req.user.username);
+  });
 
 // HOME ROUTE
 // app.get('/', (req, res) => {

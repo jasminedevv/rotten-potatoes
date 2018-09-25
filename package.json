@@ -17,6 +17,8 @@
     "express-handlebars": "^3.0.0",
     "method-override": "^3.0.0",
     "mongoose": "^5.2.14",
-    "moviedb-promise": "^1.2.8"
+    "moviedb-promise": "^1.2.8",
+    "passport": "^0.4.0",
+    "passport-google-oauth": "^1.0.0"
   }
 }
