@@ -4,11 +4,12 @@ const moviedb = new MovieDb('4765a9a8b4beb9c427e85907d8e55108')
 
 module.exports = (app) => {
 
-    app.get('movies/:id', (req, res) => {
-        console.log("made it this far. Now attempting to get movie detail from moviedb...");
+    app.get('/movies/:id', (req, res) => {
+        console.log("Attempting to get movie detail from moviedb...");
         moviedb.movieInfo({ id: req.params.id }).then(
             response => {
-                res.render('movies-detail', { movies: response.result});
+                console.log("SUccess getting movie detail. Here is the response:\n", response)
+                res.render('movies-detail', { movie: response});
             }).catch(console.error)
     });
     
