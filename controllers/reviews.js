@@ -3,12 +3,20 @@ const Comment = require('../models/comment');
 
 module.exports = (app) => {
 
-  // ADD
-  app.get('/reviews/new', (req, res) => {
-      res.render('reviews-new', {});
+  // VIEW CREATE FORM
+  app.get('/movies/:movieId/reviews/new', (req, res) => {
+      res.render('reviews-new', { movieId: req.params.movieId });
+      console.log(req.params.movieId);
+    })
+
+    // VIEW REVIEWS INDEX
+  app.get('/reviews', (req, res) => {
+      Review.find( function(err, reviews) {
+        res.render('reviews-index', {reviews: reviews});
+      })
     })
     
-  // EDIT
+  // EDIT ONE REVIEW
   app.get('/reviews/:id/edit', function (req, res) {
       Review.findById(req.params.id, function(err, review) {
         res.render('reviews-edit', {review: review});
@@ -49,11 +57,13 @@ module.exports = (app) => {
     })
   })
     
-  // CREATE?
+  // CREATE
   app.post('/reviews', (req, res) => {
+    // req.body needs to contain MovieId
+    console.log(req.body);
     Review.create(req.body)
         .then((review) => {
-            res.redirect(`/reviews/${review._id}`);
+            res.redirect(`/movies/${review.movieId}`);
         })
         .catch((err) => {
             console.log(err.message)

@@ -7,5 +7,23 @@
         <img src="https://image.tmdb.org/t/p/w500{{movie.poster_path}}"/>
         <br><br><br>
         <p class="lead">{{movie.overview}}</p>
+        <br><br>
+        <h3>Reviews</h3>
+        {{!-- everything past here not working --}}
+        {{#each reviews}}
+            <div>
+                <h1>
+                    <a href="/movies/{{this.movieId}}/reviews/{{this._id}}">{{this.title}}</a></h1>
+                <h2>{{this.movieTitle}}</h2>
+                <p>{{this.description}}</p>
+                <p><a href="/reviews/{{this._id}}/edit">Edit</a></p>
+                <p><form method="POST" action="/reviews/{{this._id}}?_method=DELETE">
+                    <button class="btn btn-primary" type="submit">Delete</button>
+                </form></p>
+            </div>
+        {{/each}}
+        <div class="text-right">
+            <a href="/movies/{{movie.id}}/reviews/new" class="btn btn-primary">Write Review</a>
+        </div>
     </div>
 </div>
