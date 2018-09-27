@@ -1,22 +1,12 @@
 const MovieDb = require('moviedb-promise');
-const moviedb = new MovieDb('4765a9a8b4beb9c427e85907d8e55108');
+const moviedb = new MovieDb(process.env.MOVIE_DB_KEY);
 const Review = require('../models/review');
 const Comment = require('../models/comment');
 
-
 module.exports = (app) => {
 
-    // app.get('/movies/:id', (req, res) => {
-    //     console.log("Attempting to get movie detail from moviedb...");
-    //     moviedb.movieInfo({ id: req.params.id }).then(
-    //         response => {
-    //             console.log("SUccess getting movie detail. Here is the response:\n", response)
-    //             res.render('movies-detail', { movie: response});
-    //         }).catch(console.error)
-    // });
-    // I have now learned to never delete my working code when this tutorial tells me to
-
     app.get('/movies/:id', (req, res) => {
+        console.log(process.env.MOVIE_DB_KEY);
         console.log("Attempting to get movie detail from moviedb...");
         moviedb.movieInfo({ id: req.params.id }).then(movie => {
             console.log("Success!");

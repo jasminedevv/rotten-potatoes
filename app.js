@@ -4,6 +4,11 @@ const bodyParser = require('body-parser');
 const methodOverride = require('method-override')
 const reviews = require("./controllers/reviews");
 const comments = require("./controllers/comments");
+
+if (!process.env.PORT) {
+    require('dotenv').config()
+}
+
 const movies = require("./controllers/movies");
 const Review = require('./models/review');
 const Comment = require('./models/comment');
@@ -35,18 +40,6 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/rotten-potatoes
 reviews(app)
 comments(app)
 movies(app)
-
-// HOME ROUTE
-// app.get('/', (req, res) => {
-//   Review.find()
-//       .then(reviews => {
-//           res.render('reviews-index', {reviews: reviews});
-//       })
-//       .catch(err => {
-//           console.log(err);
-//           res.send("this app is broken :( <br><br><a href=\"https://www.youtube.com/watch?v=yD2FSwTy2lw\">no one\'s around to help</a>");
-//       });
-// });
 
 app.listen(process.env.PORT || 3000, function(){
   console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
