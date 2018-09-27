@@ -3,6 +3,7 @@ const Comment = require('../models/comment')
 module.exports = (app) => {
 // CREATE Comment
     app.post('/reviews/comments', (req, res) => {
+      console.log("incoming request with content:", req.body);
       Comment.create(req.body).then(comment => {
         console.log("comment registered with content: "  ,req.body);
         res.status(200).send({ comment: comment });

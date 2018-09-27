@@ -1,68 +1,78 @@
 // listen for a form submit event
-document.getElementById("newComment").addEventListener("submit", e => {
-    // prevent the default form behavior
-    e.preventDefault();
-    console.log("made it past prevent default")
-    // serialize the form data into an object
-    let comment = {};
-    const inputs = document.getElementsByClassName('form-control');
-    for (var i = 0; i < inputs.length; i++) {
-      comment[inputs[i].name] = inputs[i].value;
-    }
+let el = document.getElementById("newComment");
+if (el) {
+    var datas = {};
+    el.addEventListener("submit", (e) => {
+        // prevent the default form behavior
+        // serialize the form data into an object
+        e.preventDefault();
+        var form = document.getElementById("newComment");
+        console.log("Submitted form looks like this: ", form);
+        let comment = $("form").serializeArray();
+        console.log(comment);
+        $(comment).each(function (index, obj) {
+            datas[obj.name] = obj.value;
+        });
 
-    // use axios to initialize a post request and send in the form data
+        axios.post('/reviews/comments', datas)
+            .then(function (response) {
+                // wait for the success response from the server
+                console.log("the server has responded with: ", response);
+                // clear the form
+                form.reset();
+                // add the comment to the page
+                var parentnode = document.getElementById("comments");
+                console.log(response.data.comment);
+                $(parentnode).prepend(                   `
+                <div class="card" id="${response.data.comment._id}">
+                <div class="card-block">
+                <h4 class="card-title">${response.data.comment.title}</h4>
+                <p class="card-text">${response.data.comment.content}</p>
+                <p>
+                <button class="btn btn-link" id="deleteComment" data-comment-id=${response.data.comment._id}>Delete</button>
+                </p>
+                </div>
+                </div>
+                `
+                );
+            })
+    });
+}
 
-    // axios.post('/user', comment)
-    //   .then(function (response) {
-    //     // wait for the success response from the server
-    //     console.log("Miraculously, this code ran.")
-    //     console.log(response);
-    //     // remove the information from the form
-    //     this.reset();
-    //     // display the data as a new comment on the page
-    //     document.getElementById('comments').prepend(
-    //       `
-    //        <div class="card">
-    //          <div class="card-block">
-    //            <h4 class="card-title">${response.title}</h4>
-    //            <p class="card-text">${response.content}</p>
-    //            <p>
-    //               <form method="POST" action="/reviews/comments/${response._id}?_method=DELETE">
-    //                 <button class="btn btn-link" type="submit">Delete</button>
-    //               </form>
-    //            </p>
-    //          </div>
-    //        </div>
-    //       `
-    //     );
-    //   })
+elementsArray = document.querySelectorAll('[id^="deleteComment-"]');
+console.log(elementsArray);
+elementsArray.forEach(function (elem) {
+    elem.addEventListener('click', (e) => {
+        console.log("click!");
+        let commentId = elem.getAttribute('data-comment-id');
+        console.log(commentId);
+        axios.delete(`/reviews/comments/${commentId}`)
+            .then(response => {
+                console.log(response);
+                comment = document.getElementById(commentId);
+                comment.parentNode.removeChild(comment);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    });
+});
 
-    axios.post('/reviews/comments', comment)
-      .then(function (httpResponse) {
-          var newElement = `
-          <div class="card">
-            <div class="card-block">
-              <p>This comment's ID is ${httpResponse.data.comment._id}</p>
-              <h4 class="card-title">${httpResponse.data.comment.title}</h4>
-              <p class="card-text">${httpResponse.data.comment.content}</p>
-              <p>
-                 <form method="POST" action="/reviews/comments/${httpResponse.data.comment._id}?_method=DELETE">
-                   <button class="btn btn-link" type="submit">Delete</button>
-                 </form>
-              </p>
-            </div>
-          </div>
-         `;
-        //  console.log(newElement);
-        document.getElementById('comments').prepend($.parseHTML(newElement));
-        // wait for the success response from the server
-        console.log(httpResponse.data.comment._id);
-        // remove the information from the form
-        // display the data as a new comment on the page
-      })
-      .catch(function (error) {
-        console.log(error);
-        // handle any errors
-        alert('There was a problem saving your comment. Please try again.')
-      });
+reviewsArray = document.querySelectorAll('[id^="deleteReview-"]');
+console.log(reviewsArray);
+reviewsArray.forEach(function (elem) {
+    elem.addEventListener('click', (e) => {
+        console.log("click!");
+        let reviewId = elem.getAttribute('data-review-id');
+        console.log(reviewId);
+        axios.delete(`/admin/reviews/${reviewId}`)
+            .then(response => {
+                console.log(response);
+                review = document.getElementById(reviewId);
+                review.parentNode.removeChild(review);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    });
 });
