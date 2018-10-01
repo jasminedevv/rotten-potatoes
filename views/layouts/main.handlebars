@@ -5,22 +5,25 @@
   <title>Rotten Potatoes</title>
   <link rel="icon" href="/favicon.ico" sizes="16x16" type="image/png">
   <!-- Latest compiled and minified CSS -->
+
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <style>
     img {
       max-width: 100%;
     }
 
-    .hover-outline:hover {
-      border: 3px solid white;
-      transition: 0.1s;
+    .btn-primary {
+      background-color: tomato !important;
+      color: black;
+      border: 1px solid black;
     }
-    .hover-outline {
-      border: 0px solid white;
+
+    a {
+      color: tomato;
     }
 
     .footer {
-      background-color: #335566;
+      background-color: #639;
       color: #cccccc;
       margin: 0;
       padding: 20px;
@@ -30,13 +33,12 @@
       color: white;
     }
 
-    .container {
-      background: #222;
-      color: #ccc;
+    .container-body {
+      background: #eee;
     }
 
     body {
-      background-color: tomato;
+      background-color: black;
     }
 
     .navbar {
@@ -45,16 +47,17 @@
     }
     
   </style>
+
 </head>
 <body>
 
   {{> navbar}}
-
-<div class="container">
+<br><br><br><br>
+<div class="container container-body">
   {{{body}}}
   <br><br>
 </div>
-
+<br><br><br><br>
 <br><br>
 
 <div class="footer">
