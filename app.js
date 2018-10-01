@@ -9,6 +9,7 @@ if (!process.env.PORT) {
     require('dotenv').config()
 }
 
+const admin = require("./controllers/admin");
 const movies = require("./controllers/movies");
 const Review = require('./models/review');
 const Comment = require('./models/comment');
@@ -36,10 +37,12 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/rotten-potatoes
     throw err;
 })
 
+
 // REVIEWS ROUTE
-reviews(app)
-comments(app)
-movies(app)
+reviews(app);
+comments(app);
+movies(app);
+admin(app);
 
 app.listen(process.env.PORT || 3000, function(){
   console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
