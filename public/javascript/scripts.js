@@ -29,7 +29,7 @@ if (el) {
                 <h4 class="card-title">${httpResponse.data.comment.title}</h4>
                 <p class="card-text">${httpResponse.data.comment.content}</p>
                 <p>
-                <button class="btn btn-link" id="deleteComment" data-comment-id=${httpResponse.data.comment._id}>Delete</button>
+                <button class="btn btn-link" id="deleteComment-{httpResponse.data.comment._id}" data-comment-id=${httpResponse.data.comment._id}>Delete</button>
                 </p>
                 </div>
                 </div>
@@ -45,31 +45,12 @@ elementsArray.forEach(function (elem) {
     elem.addEventListener('click', (e) => {
         console.log("click!");
         let commentId = elem.getAttribute('data-comment-id');
-        console.log(commentId);
+        console.log("Deleting comment #", commentId);
         axios.delete(`/reviews/comments/${commentId}`)
             .then(httpResponse => {
                 console.log(httpResponse);
                 comment = document.getElementById(commentId);
                 comment.parentNode.removeChild(comment);
-            })
-            .catch(error => {
-                console.log(error);
-            });
-    });
-});
-
-reviewsArray = document.querySelectorAll('[id^="deleteReview-"]');
-console.log(reviewsArray);
-reviewsArray.forEach(function (elem) {
-    elem.addEventListener('click', (e) => {
-        console.log("click!");
-        let reviewId = elem.getAttribute('data-review-id');
-        console.log(reviewId);
-        axios.delete(`/admin/reviews/${reviewId}`)
-            .then(httpResponse => {
-                console.log(httpResponse);
-                review = document.getElementById(reviewId);
-                review.parentNode.removeChild(review);
             })
             .catch(error => {
                 console.log(error);

@@ -6,14 +6,11 @@ const Comment = require('../models/comment');
 module.exports = (app) => {
 
     app.get('/movies/:id', (req, res) => {
-        console.log(process.env.MOVIE_DB_KEY);
-        console.log("Attempting to get movie detail from moviedb...");
-        moviedb.movieInfo({ id: req.params.id }).then(movie => {
-            console.log("Success!");
-            console.log("Now looking up reviews in local db...");
-          Review.find({ movieId: req.params.id }).then(reviews => {
-              console.log("\nReviews successfully fetched:\n");
-              console.log(reviews)
+        moviedb.movieInfo({ id: req.params.id })
+        .then(movie => {
+          Review.find({ movieId: req.params.id })
+          .then(reviews => {
+              console.log(movie.base_url + movie.backdrop_path);
             res.render('movies-detail', { reviews: reviews, movie: movie });
           })
         }).catch(console.error)
