@@ -10,7 +10,7 @@
   </thead>
   <tbody>
     {{#each reviews}}
-      <tr>
+      <tr id="{{this._id}}">
         <th scope="row">{{this._id}}</th>
         <td>{{this.movieId}}</td>
         <td>{{this.title}}</td>
